@@ -1,3 +1,4 @@
+package lab1;
 
 import java.util.*;
 
@@ -33,7 +34,7 @@ class Grammar {
 
     public FiniteAutomaton toFiniteAutomaton() {
         Set<String> states = new HashSet<>(VN);
-        states.add("qf"); // Final state
+        states.add("qf");
         Set<Character> alphabet = new HashSet<>(VT);
         Map<String, Map<Character, String>> transitions = new HashMap<>();
         String startState = startSymbol;
@@ -42,7 +43,7 @@ class Grammar {
 
         for (String nonTerminal : P.keySet()) {
             for (String rule : P.get(nonTerminal)) {
-                char terminal = rule.charAt(0); // First character is the terminal symbol
+                char terminal = rule.charAt(0);
                 String nextState = rule.length() > 1 ? rule.substring(1) : "qf";
 
                 transitions.putIfAbsent(nonTerminal, new HashMap<>());

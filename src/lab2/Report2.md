@@ -1,65 +1,72 @@
-# Determinism in Finite Automata. Conversion from NDFA to DFA. Chomsky Hierarchy.
+# **Determinism in Finite Automata. Conversion from NDFA to DFA. Chomsky Hierarchy**
 
-### Course: Formal Languages & Finite Automata
+## **Course:** Formal Languages & Finite Automata  
+### **Author:** Alexandru Magla | FAF-231 | Variant 20  
 
-### Author: Alexandru Magla | FAF-231 | Variant 20
+---
 
-----
+## **Theory**
 
-## Theory
+### **Finite Automata**
+Automata theory is the study of abstract computational devices (abstract state machines). An automaton serves as a model for digital computation, containing essential components:
 
-### Finite Automata
+- A mechanism for reading input (assumed to be a string over a given alphabet).
+- A control unit with a finite number of states.
+- A transition function dictating state changes.
+- An output mechanism.
 
-Automata theory is the study of abstract computational devices (abstract state machines). An automaton is an abstract model of a digital computer. Every automaton includes essential features: it has a mechanism for reading input (assumed to be a string over a given alphabet), produces output in some form, and contains a control unit that can be in a finite number of states. The control unit changes state based on defined transition functions.
+Finite automata (FA) are classified into different types:
 
-The finite automaton (FA) is characterized by a finite number of states and has the following types:
+- **Deterministic Finite Automaton (DFA)** – Each input symbol transitions to exactly one state.
+- **Nondeterministic Finite Automaton (NFA)** – An input symbol can transition to multiple states, with possible ε (empty string) moves.
+- **ε-Nondeterministic Finite Automaton (ε–NFA)** – Allows ε-transitions.
 
-- **Deterministic Finite Automaton (DFA)** - each input symbol leads to exactly one state.
-- **Nondeterministic Finite Automaton (NFA)** - an input symbol can lead to multiple states, and transitions can include ε (empty string) moves.
-- **ε-Nondeterministic Finite Automaton (ε–NFA)** - allows ε-transitions.
+### **Deterministic Finite Automaton (DFA)**
+A DFA is defined as a 5-tuple **(Q, Σ, δ, q₀, F)** where:
 
-### Deterministic Finite Automaton (DFA)
-A deterministic finite automaton is a 5-tuple \( Q, \Sigma, \delta, q_0, F \) where:
+- **Q**: Finite set of states.
+- **Σ**: Input alphabet.
+- **δ**: Transition function, **δ: Q × Σ → Q**.
+- **q₀**: Initial state.
+- **F**: Set of final states.
 
-- \( Q \) is a finite set of states.
-- \( \Sigma \) is an input alphabet.
-- \( \delta \) is a transition function, \( \delta: Q \times \Sigma \to Q \).
-- \( q_0 \) is the initial state.
-- \( F \) is a set of final states.
+### **Nondeterministic Finite Automaton (NFA)**
+An NFA is defined as a 5-tuple **(Q, Σ, δ, q₀, F)** where:
 
-### Nondeterministic Finite Automaton (NFA)
-A nondeterministic finite automaton is a 5-tuple \( Q, \Sigma, \delta, q_0, F \) where:
+- **Q**: Finite set of states.
+- **Σ**: Input alphabet.
+- **δ**: Transition function, **δ: Q × Σ → 2^Q**.
+- **q₀**: Initial state.
+- **F**: Set of final states.
 
-- \( Q \) is a finite set of states.
-- \( \Sigma \) is an input alphabet.
-- \( \delta \) is a transition function, \( \delta: Q \times \Sigma \to 2^Q \).
-- \( q_0 \) is the initial state.
-- \( F \) is a set of final states.
+**Key Differences from DFA:**
+- The transition function **δ** can lead to multiple states.
+- Allows ε-transitions.
 
-**Differences from the DFA:**
-- The transition function \( \delta \) can go into multiple states.
-- It can have ε-transitions.
-
-### Chomsky Hierarchy
-The Chomsky hierarchy classifies formal grammars into four types based on complexity:
+### **Chomsky Hierarchy**
+The Chomsky hierarchy classifies grammars based on complexity:
 
 - **Type 0**: Recursively enumerable grammar.
 - **Type 1**: Context-sensitive grammar.
 - **Type 2**: Context-free grammar.
 - **Type 3**: Regular grammar (right-linear or left-linear).
 
-## Objectives:
-1. Understand automata and their applications.
-2. Implement a function in the Grammar class to classify the grammar based on Chomsky hierarchy.
-3. Given a finite automaton definition, complete the following tasks:
-   - Convert a finite automaton to a regular grammar.
-   - Determine whether the FA is deterministic or non-deterministic.
-   - Implement functionality to convert an NDFA to a DFA.
+---
 
-## Implementation Description
+## **Objectives**
+1. Understand automata and their applications.
+2. Implement a function to classify grammar based on Chomsky hierarchy.
+3. Given a finite automaton definition, perform the following tasks:
+   - Convert an FA to a regular grammar.
+   - Determine if an FA is deterministic or non-deterministic.
+   - Convert an NDFA to a DFA.
+
+---
+
+## **Implementation Description**
 
 ### **Classifying Grammar Based on Chomsky Hierarchy**
-To determine the type of grammar, the `classifyGrammar` method inspects the production rules and classifies them accordingly:
+To determine the type of grammar, the `classifyGrammar` method inspects production rules and classifies them accordingly:
 
 ```java
 public String classifyGrammar() {
@@ -88,7 +95,7 @@ public String classifyGrammar() {
 ```
 
 ### **Converting Finite Automaton to Regular Grammar**
-The `finiteAutomatonToGrammar` method converts finite automaton transitions into equivalent grammar rules.
+This method converts finite automaton transitions into equivalent grammar rules:
 
 ```java
 public Map<String, List<String>> finiteAutomatonToGrammar(FiniteAutomaton fa) {
@@ -164,6 +171,12 @@ public FiniteAutomaton convertToDFA() {
 }
 ```
 
+---
+
 ## **Conclusion**
-Through this lab, we implemented key concepts in finite automata theory, including classification of grammars, conversion from FA to grammar, and NDFA to DFA conversion. These implementations deepened our understanding of automata and formal language theory.
+This lab provided a deeper understanding of automata and formal languages through the implementation of:
+- Grammar classification based on Chomsky hierarchy.
+- Conversion of FA to grammar.
+- Conversion of NDFA to DFA.
+These concepts play a crucial role in computational theory and compiler design.
 

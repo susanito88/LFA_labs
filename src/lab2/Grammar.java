@@ -48,9 +48,10 @@ public class Grammar {
                 if (lhs.length() != 1 || !VN.contains(lhs)) {
                     isContextFree = false;
                 }
-                if (rhs.length() > 2 || (rhs.length() == 2 && !Character.isLowerCase(rhs.charAt(0)))) {
+                if (rhs.length() > 2 || (rhs.length() == 2 && !(Character.isLowerCase(rhs.charAt(0)) && VN.contains(String.valueOf(rhs.charAt(1)))))) {
                     isRegular = false;
                 }
+
             }
         }
 

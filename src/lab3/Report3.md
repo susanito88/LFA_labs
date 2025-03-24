@@ -8,48 +8,40 @@
 ## **Theory**
 
 ### **Lexical Analysis**
-Lexical analysis is the process of converting a sequence of characters (source code) into a sequence of tokens. This step is a fundamental component of a compiler or interpreter. The component responsible for lexical analysis is known as a **lexer**, **scanner**, or **tokenizer**.
+Lexical analysis is the first step in the compilation process, converting a sequence of characters (source code) into a sequence of tokens. This step is handled by a **lexer**, also called a **scanner** or **tokenizer**.
 
-A lexer processes an input string and produces a stream of **lexemes**, which are then categorized into **tokens** based on the syntax of the programming language. Tokens typically represent keywords, identifiers, operators, numbers, and punctuation marks.
+A lexer scans an input string and identifies **lexemes**, which are categorized into **tokens** based on language rules. Tokens represent elements like keywords, identifiers, operators, numbers, and punctuation.
 
-### **Lexemes vs Tokens**
-- **Lexemes**: These are the raw substrings extracted from the input text based on defined rules (e.g., splitting by whitespace or symbols).
-- **Tokens**: These provide meaning to the lexemes by categorizing them into recognizable language constructs (e.g., keywords, identifiers, literals).
-
-For example, given the input:
+For example, the input:
 ```plaintext
 sin(30) + cos(45) - 10.5 * 2
 ```
-The lexer might produce the following tokens:
+Generates tokens:
 ```plaintext
-Token(SIN, "sin"), Token(LPAREN, "("), Token(NUMBER, "30"), Token(RPAREN, ")"),
-Token(PLUS, "+"), Token(COS, "cos"), Token(LPAREN, "("), Token(NUMBER, "45"),
-Token(RPAREN, ")"), Token(MINUS, "-"), Token(NUMBER, "10.5"), Token(MULTIPLY, "*"), Token(NUMBER, "2")
+Token(SIN, "sin"), Token(LPAREN, "("), Token(NUMBER, "30"), ...
 ```
 
 ---
 
 ## **Objectives**
-1. Understand lexical analysis and tokenization.
-2. Implement a lexer/scanner to tokenize an arithmetic expression with trigonometric functions.
-3. Demonstrate how the lexer processes input and generates tokens.
+- Understand lexical analysis and tokenization.
+- Implement a lexer to tokenize an arithmetic expression with trigonometric functions.
+- Demonstrate how the lexer processes input and generates tokens.
 
 ---
 
 ## **Implementation Description**
 
 ### **Token Representation**
-Each token consists of a **type** (category) and an optional **value**. The `Token` class represents this structure:
+A **token** consists of a **type** and an optional **value**:
 ```java
 public class Token {
     TokenType type;
     String value;
-    
     public Token(TokenType type, String value) {
         this.type = type;
         this.value = value;
     }
-    
     @Override
     public String toString() {
         return "Token{" + "type=" + type + ", value='" + value + "'}";
@@ -58,7 +50,7 @@ public class Token {
 ```
 
 ### **Defining Token Types**
-A set of predefined token categories is defined in `TokenType`:
+A set of predefined **token categories**:
 ```java
 enum TokenType {
     NUMBER, SIN, COS, PLUS, MINUS, MULTIPLY, DIVIDE, LPAREN, RPAREN, EOF;
@@ -66,52 +58,40 @@ enum TokenType {
 ```
 
 ### **Lexer Implementation**
-The `Lexer` class scans the input string using **regular expressions** to recognize token patterns:
+The **Lexer** class scans an input string using **regular expressions**. It maintains a position pointer and matches patterns to extract tokens sequentially.
+
+#### **Class Structure**
 ```java
 public class Lexer {
     private final String input;
     private int position = 0;
-    
     private static final Pattern TOKEN_PATTERNS = Pattern.compile(
         "\\s*(?:(?<NUMBER>\\d+(?:\\.\\d+)?)|" +
-        "(?<SIN>sin)|" +
-        "(?<COS>cos)|" +
-        "(?<PLUS>\\+)|" +
-        "(?<MINUS>-)|" +
-        "(?<MULTIPLY>\\*)|" +
-        "(?<DIVIDE>/)|" +
-        "(?<LPAREN>\\()|" +
-        "(?<RPAREN>\\)))"
+        "(?<SIN>sin)|(?<COS>cos)|(?<PLUS>\\+)|(?<MINUS>-)|" +
+        "(?<MULTIPLY>\\*)|(?<DIVIDE>/)|(?<LPAREN>\\()|(?<RPAREN>\\)))"
     );
-    
+
     public Lexer(String input) {
         this.input = input;
     }
-    
+```
+
+#### **Tokenization Process**
+The `tokenize()` method uses a `Matcher` to identify token patterns and extract matches.
+```java
     public List<Token> tokenize() {
         List<Token> tokens = new ArrayList<>();
         Matcher matcher = TOKEN_PATTERNS.matcher(input);
-        
         while (matcher.find()) {
-            if (matcher.group("NUMBER") != null) {
-                tokens.add(new Token(TokenType.NUMBER, matcher.group("NUMBER")));
-            } else if (matcher.group("SIN") != null) {
-                tokens.add(new Token(TokenType.SIN, "sin"));
-            } else if (matcher.group("COS") != null) {
-                tokens.add(new Token(TokenType.COS, "cos"));
-            } else if (matcher.group("PLUS") != null) {
-                tokens.add(new Token(TokenType.PLUS, "+"));
-            } else if (matcher.group("MINUS") != null) {
-                tokens.add(new Token(TokenType.MINUS, "-"));
-            } else if (matcher.group("MULTIPLY") != null) {
-                tokens.add(new Token(TokenType.MULTIPLY, "*"));
-            } else if (matcher.group("DIVIDE") != null) {
-                tokens.add(new Token(TokenType.DIVIDE, "/"));
-            } else if (matcher.group("LPAREN") != null) {
-                tokens.add(new Token(TokenType.LPAREN, "("));
-            } else if (matcher.group("RPAREN") != null) {
-                tokens.add(new Token(TokenType.RPAREN, ")"));
-            }
+            if (matcher.group("NUMBER") != null) tokens.add(new Token(TokenType.NUMBER, matcher.group("NUMBER")));
+            else if (matcher.group("SIN") != null) tokens.add(new Token(TokenType.SIN, "sin"));
+            else if (matcher.group("COS") != null) tokens.add(new Token(TokenType.COS, "cos"));
+            else if (matcher.group("PLUS") != null) tokens.add(new Token(TokenType.PLUS, "+"));
+            else if (matcher.group("MINUS") != null) tokens.add(new Token(TokenType.MINUS, "-"));
+            else if (matcher.group("MULTIPLY") != null) tokens.add(new Token(TokenType.MULTIPLY, "*"));
+            else if (matcher.group("DIVIDE") != null) tokens.add(new Token(TokenType.DIVIDE, "/"));
+            else if (matcher.group("LPAREN") != null) tokens.add(new Token(TokenType.LPAREN, "("));
+            else if (matcher.group("RPAREN") != null) tokens.add(new Token(TokenType.RPAREN, ")"));
         }
         tokens.add(new Token(TokenType.EOF, ""));
         return tokens;
@@ -119,18 +99,34 @@ public class Lexer {
 }
 ```
 
+### **Handling Errors in Tokenization**
+A lexer should be able to handle invalid characters gracefully. A simple way to do this is by adding an error-handling mechanism:
+```java
+    public List<Token> tokenize() {
+        List<Token> tokens = new ArrayList<>();
+        Matcher matcher = TOKEN_PATTERNS.matcher(input);
+        while (matcher.find()) {
+            String match = matcher.group();
+            if (match.trim().isEmpty()) continue; // Ignore whitespace
+            if (matcher.group("NUMBER") != null) tokens.add(new Token(TokenType.NUMBER, match));
+            ...
+            else throw new IllegalArgumentException("Unexpected character: " + match);
+        }
+        tokens.add(new Token(TokenType.EOF, ""));
+        return tokens;
+    }
+```
+This ensures that unrecognized characters raise an exception instead of producing incorrect results.
+
+---
+
 ### **Testing the Lexer**
-The `LexerDemo` class demonstrates tokenization of an arithmetic expression:
+A simple **demo class** tests tokenization:
 ```java
 public class LexerDemo {
     public static void main(String[] args) {
-        String input = "sin(30) + cos(45) - 10.5 * 2";
-        Lexer lexer = new Lexer(input);
-        List<Token> tokens = lexer.tokenize();
-        
-        for (Token token : tokens) {
-            System.out.println(token);
-        }
+        Lexer lexer = new Lexer("sin(30) + cos(45) - 10.5 * 2");
+        lexer.tokenize().forEach(System.out::println);
     }
 }
 ```
@@ -156,10 +152,5 @@ Token{type=EOF, value=''}
 ---
 
 ## **Conclusion**
-This lab focused on implementing a simple **lexer** capable of recognizing arithmetic expressions with trigonometric functions. The key takeaways include:
-- Understanding the difference between **lexemes** and **tokens**.
-- Implementing a **tokenizer** using **regular expressions**.
-- Demonstrating lexical analysis through **Java code**.
-
-This implementation lays the groundwork for building more complex language processing tools such as **parsers** and **interpreters** in the future.
+This implementation provides a simple lexer that recognizes arithmetic expressions containing trigonometric functions. By breaking down an input string into categorized tokens, we enable further processing for parsing and interpretation. The use of regular expressions allows efficient pattern matching for different token types. Error handling ensures robustness, making this a strong foundation for building more complex language processing tools like parsers and interpreters.
 

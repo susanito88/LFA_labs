@@ -2,7 +2,7 @@ package lab6;
 
 import java.util.List;
 import java.util.Scanner;
-
+//sin(3 + cos(2 * 5)) - 4/(2 + tan(1))
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
